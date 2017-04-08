@@ -20,23 +20,27 @@ Default input filename is `infile.txt` and input filename is `outfile.txt`.
 
 Input file format:
 ```
-	n
-   	a_1_1 a_1_2 ... a_1_n
-   	a_2_1 a_2_2 ... a_2_n
-   	.....................
-   	a_n_1 a_n_2 ... a_n_n
+n
+a_1_1 a_1_2 ... a_1_n
+a_2_1 a_2_2 ... a_2_n
+.....................
+a_n_1 a_n_2 ... a_n_n
 ```
 Where `n` - input matrix size, `a_i_j` - matrix element on i-th row and j-th column.
 
 Output file format (if there were errors, there will be just `0`):
 ```
-	n
-	e_1
-	e_2
-	...
-	e_n
+n
+e_1
+e_2
+...
+e_n
 ```
 `e_i` - Eigenvalues, sorted ascending.
+
+Implementation details
+--------
+Reduction of the matrix to a nearly triangular form using Householder's transformation from §15.1 of <a href="http://www.twirpx.com/file/7703/">this book</a> and computing eigenvalues using LR decomposition from §7.2.1 of the <a href="http://www.twirpx.com/file/7704/">second chapter</a> of the same book.
 
 License
 --------
