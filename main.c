@@ -61,13 +61,13 @@ int main(int argc, const char * argv[]) {
         if (argv[1][0] != '-') {
             parameter_index = 3;
         }
-        
+
         for (; parameter_index < argc; parameter_index++) {
             if (_compare(argv[parameter_index], "-d", 2) == 0) {
                 parameters[0]++;
-            } else if (_compare(argv[parameter_index], "-e", 2) == 0) {
+            } else if (_compare(argv[parameter_index], "-e", 2) == 0 && _compare(argv[parameter_index], "-eps", 4) == 1) {
                 parameters[1]++;
-            } else if (_compare(argv[parameter_index], "-p", 2) == 0) {
+            } else if (_compare(argv[parameter_index], "-p", 2) == 0 && _compare(argv[parameter_index], "-prec", 5) == 1) {
                 parameters[2]++;
             } else if (_compare(argv[parameter_index], "-t", 2) == 0) {
                 parameters[3]++;
@@ -110,10 +110,10 @@ int main(int argc, const char * argv[]) {
     }
     _DEBUG = parameters[0];
     _ERROR = parameters[1];
-    
+
     const char *in_filename = "infile.txt";
     const char *out_filename = "outfile.txt";
-    
+
     FILE *in_file;
     if (argc > 1) {
         if (argv[1][0] == '-') {
@@ -124,12 +124,12 @@ int main(int argc, const char * argv[]) {
     } else {
         in_file = fopen(in_filename, "r");
     }
-    
+
     if (in_file == NULL) {
         if (_ERROR) printf("Error on opening file\n");
         return 4;
     }
-    
+
     int n;
     if (fscanf(in_file, "%d", &n) != 1) {
         if (_ERROR) printf("Error on reading file\n");
@@ -139,7 +139,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Invalid matrix size\n");
         return 6;
     }
-    
+
     double *A, *E, *tmp;
     if (!(A = malloc(n * n * sizeof(double)))) {
         if (_ERROR) printf("Memory allocation error\n");
@@ -153,7 +153,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Memory allocation error\n");
         return 7;
     }
-    
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (fscanf(in_file, "%lf", &A[i * n + j]) != 1) {
@@ -162,7 +162,7 @@ int main(int argc, const char * argv[]) {
             }
         }
     }
-    
+
     if (parameters[2]) {
         printf("А:\n");
         for (int i = 0; i < n; i++) {
@@ -177,7 +177,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Error on closing file\n");
         return 8;
     }
-    
+
     FILE *out_file;
     if (argc > 1) {
         if (argv[1][0] == '-') {
@@ -192,7 +192,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Error on opening file\n");
         return 4;
     }
-    
+
     clock_t start = clock();
     int _sim = sim(n, A, tmp, eps);
     if (_sim != 0) {
@@ -200,16 +200,16 @@ int main(int argc, const char * argv[]) {
             if (_ERROR) printf("Error on writing into file\n");
             return 9;
         }
-        
+
         if (fclose(out_file)) {
             if (_ERROR) printf("Error on closing file\n");
             return 8;
         }
-        
+
         free(A);
         free(E);
         free(tmp);
-        
+
         return 1;
     }
     if (parameters[2]) {
@@ -221,7 +221,7 @@ int main(int argc, const char * argv[]) {
             printf("\n");
         }
     }
-    
+
     int _evc = evc(n, max_iter, eps, A, E, tmp, prec);
     if (parameters[3] == 1) printf("\nExecution time: %lf sec(s)\n", (double)(clock() - start) / CLOCKS_PER_SEC);
     if (_evc != 0) {
@@ -229,19 +229,19 @@ int main(int argc, const char * argv[]) {
             if (_ERROR) printf("Error on writing into file\n");
             return 9;
         }
-        
+
         if (fclose(out_file)) {
             if (_ERROR) printf("Error on closing file\n");
             return 8;
         }
-        
+
         free(A);
         free(E);
         free(tmp);
-        
+
         return 1;
     }
-    
+
     if (fprintf(out_file, "%d\n", n) < 0) {
         if (_ERROR) printf("Error on writing into file\n");
         return 9;
@@ -256,7 +256,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Error on closing file\n");
         return 8;
     }
-    
+
     free(A);
     free(E);
     free(tmp);
