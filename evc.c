@@ -1,14 +1,5 @@
 #include "task.h"
 
-int compare (const void *a, const void *b) {
-    if (*(double *)a > *(double *)b) {
-        return 1;
-    } else if (*(double *)a < *(double *)b) {
-        return -1;
-    }
-    return 0;
-}
-
 size_t evc_memsize(int n) {
     return n * n * sizeof(double);
 }
@@ -134,11 +125,8 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
     // x^2 + p*x + q = 0
     double p = -A[0 * n + 0] - A[1 * n + 1];
     double q = A[0 * n + 0] * A[1 * n + 1] - A[0 * n + 1] * A[1 * n + 0];
-    if (_DEBUG) printf("L^2 + p*L + q = 0 ==> p = %lf, q = %lf\n", p, q);
     E[0] = (-p - sqrt(p * p - 4 * q)) / 2;
     E[1] = (-p + sqrt(p * p - 4 * q)) / 2;
-    
-    qsort(E, n, sizeof(double), compare);
     
     return 0;
 }

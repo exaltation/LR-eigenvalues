@@ -10,6 +10,17 @@ int length(const char *str) {
     return count;
 }
 
+int compare (const void *a, const void *b) {
+    double _a = *(double *)a;
+    double _b = *(double *)b;
+    if (_a > _b) {
+        return 1;
+    } else if (_a < _b) {
+        return -1;
+    }
+    return 0;
+}
+
 int _compare(const char *a, const char *b, int len) {
     while (len--) {
         if (*a++ != *b++) {
@@ -246,6 +257,7 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Error on writing into file\n");
         return 9;
     }
+    qsort(E, n, sizeof(double), compare);
     for (int i = 0; i < n; i++) {
         if (fprintf(out_file, "%.9lf\n", E[i]) < 0) {
             if (_ERROR) printf("Error on writing into file\n");
