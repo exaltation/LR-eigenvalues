@@ -1,5 +1,5 @@
 # LR-eigenvalues
-Computes the eigenvalues of any kind of quadratic matrixes.
+Computes the eigenvalues of any kind of quadratic matrices.
 
 Usage
 ===
