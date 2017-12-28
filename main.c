@@ -37,8 +37,8 @@ void print_help() {
            "-e                print errors [default OFF]\n"
            "-p                print matrix [default OFF]\n"
            "-t                print execution time [default OFF]\n"
-           "-prec=<num>       precision [default - 1e-14]\n"
-           "-eps=<num>        'epsilon' [default - 1e-10]\n"
+           "-prec=<num>       precision [default - 1e-20]\n"
+           "-eps=<num>        'epsilon' [default - 1e-20]\n"
            "-max_iter=<num>   limit number of iterations [default - 0, i.e. not limit]\n"
            "-h, -?            print this and exit\n");
 }
@@ -60,8 +60,8 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
     int max_iter = 0;
-    long double prec = 1e-14;
-    long double eps = 1e-10;
+    long double prec = 1e-20;
+    long double eps = 1e-20;
     // проверка на корректность параметров
     int* parameters = (int*)malloc(9 * sizeof(int));
     for (int i = 0; i < 9; i++) {
