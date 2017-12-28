@@ -11,8 +11,8 @@ int length(const char *str) {
 }
 
 int compare (const void *a, const void *b) {
-    double _a = *(double *)a;
-    double _b = *(double *)b;
+    long double _a = *(long double *)a;
+    long double _b = *(long double *)b;
     if (_a > _b) {
         return 1;
     } else if (_a < _b) {
@@ -60,8 +60,8 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
     int max_iter = 0;
-    double prec = 1e-14;
-    double eps = 1e-10;
+    long double prec = 1e-14;
+    long double eps = 1e-10;
     // проверка на корректность параметров
     int* parameters = (int*)malloc(9 * sizeof(int));
     for (int i = 0; i < 9; i++) {
@@ -151,12 +151,12 @@ int main(int argc, const char * argv[]) {
         return 6;
     }
 
-    double *A, *E, *tmp;
-    if (!(A = malloc(n * n * sizeof(double)))) {
+    long double *A, *E, *tmp;
+    if (!(A = malloc(n * n * sizeof(long double)))) {
         if (_ERROR) printf("Memory allocation error\n");
         return 7;
     }
-    if (!(E = malloc(n * sizeof(double)))) {
+    if (!(E = malloc(n * sizeof(long double)))) {
         if (_ERROR) printf("Memory allocation error\n");
         return 7;
     }
@@ -167,7 +167,7 @@ int main(int argc, const char * argv[]) {
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            if (fscanf(in_file, "%lf", &A[i * n + j]) != 1) {
+            if (fscanf(in_file, "%LF", &A[i * n + j]) != 1) {
                 if (_ERROR) printf("Error on reading file\n");
                 return 5;
             }
@@ -178,7 +178,7 @@ int main(int argc, const char * argv[]) {
         printf("А:\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                printf("%.9lf\t", A[i * n + j]);
+                printf("%.9LF\t", A[i * n + j]);
             }
             printf("\n");
         }
@@ -227,14 +227,14 @@ int main(int argc, const char * argv[]) {
         printf("А:\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                printf("%.9lf\t", A[i * n + j]);
+                printf("%.9LF\t", A[i * n + j]);
             }
             printf("\n");
         }
     }
 
     int _evc = evc(n, max_iter, eps, A, E, tmp, prec);
-    if (parameters[3] == 1) printf("\nExecution time: %lf sec(s)\n", (double)(clock() - start) / CLOCKS_PER_SEC);
+    if (parameters[3] == 1) printf("\nExecution time: %LF sec(s)\n", (long double)(clock() - start) / CLOCKS_PER_SEC);
     if (_evc != 0) {
         if (fprintf(out_file, "0") < 0) {
             if (_ERROR) printf("Error on writing into file\n");
@@ -257,9 +257,9 @@ int main(int argc, const char * argv[]) {
         if (_ERROR) printf("Error on writing into file\n");
         return 9;
     }
-    qsort(E, n, sizeof(double), compare);
+    qsort(E, n, sizeof(long double), compare);
     for (int i = 0; i < n; i++) {
-        if (fprintf(out_file, "%.9lf\n", E[i]) < 0) {
+        if (fprintf(out_file, "%.9LF\n", E[i]) < 0) {
             if (_ERROR) printf("Error on writing into file\n");
             return 9;
         }

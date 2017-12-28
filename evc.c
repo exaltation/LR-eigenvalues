@@ -1,15 +1,15 @@
 #include "task.h"
 
 size_t evc_memsize(int n) {
-    return n * n * sizeof(double);
+    return n * n * sizeof(long double);
 }
 
-double matrix_norm(double *A, int n) {
-    double result = 0.;
+long double matrix_norm(long double *A, int n) {
+    long double result = 0.;
     for (int i = 0; i < n; i++) {
-        double sum = 0.;
+        long double sum = 0.;
         for (int j = 0; j < n; j++) {
-            sum += fabs(A[i*n + j]);
+            sum += fabsl(A[i*n + j]);
         }
         
         if (result < sum) {
@@ -20,17 +20,17 @@ double matrix_norm(double *A, int n) {
     return result;
 }
 
-int evc(int n, int max_iterations, double epsilon, double* A, double* E, double* tmp, double precision) {
+int evc(int n, int max_iterations, long double epsilon, long double* A, long double* E, long double* tmp, long double precision) {
     int _n = n;
     
     for (int iteration = 0; _n > 2; iteration++) {
         if (_DEBUG) printf("\n**Iteration #%d**\n", iteration);
         if (_DEBUG) printf("Current matrix size = %d\n", _n);
-        double e = precision * matrix_norm(A, n);
+        long double e = precision * matrix_norm(A, n);
         
         if (_DEBUG) printf("Exhaustion\n");
         for (int i = 0; i < _n - 1; i++) {
-            if (fabs(A[(i + 1) * n + i]) < e) {
+            if (fabsl(A[(i + 1) * n + i]) < e) {
                 int nn = i + 1;
                 
                 for (int _i = 0, item = 0; _i <= i; _i++) {
@@ -42,8 +42,8 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
                 evc(nn, max_iterations - iteration, epsilon, A, E, tmp, precision);
                 
                 int nnn = _n - nn;
-                double *new_A = &A[(i + 1) * n + i + 1];
-                double *new_E = &E[nn];
+                long double *new_A = &A[(i + 1) * n + i + 1];
+                long double *new_E = &E[nn];
                 
                 for (int _i = i + 1, item = 0; _i < _n; _i++) {
                     for (int _j = i + 1; _j < _n; _j++, item++) {
@@ -56,11 +56,11 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
             }
         }
         
-        double sdvig = A[(_n - 1) * n + _n - 1];
-        if (fabs(A[0] - sdvig) < epsilon) {
+        long double sdvig = A[(_n - 1) * n + _n - 1];
+        if (fabsl(A[0] - sdvig) < epsilon) {
             sdvig += 0.1;
         }
-        if (_DEBUG) printf("Shifting matrix (s = %.9lf)\n", sdvig);
+        if (_DEBUG) printf("Shifting matrix (s = %.9LF)\n", sdvig);
         for (int i = 0; i < _n; i++) {
             A[i * n + i] -= sdvig;
         }
@@ -70,7 +70,7 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
             tmp[0 * n + k] = A[0 * n + k];
         }
         for (int i = 1; i < _n; i++) {
-            if (fabs(tmp[(i - 1) * n + i - 1]) < epsilon) {
+            if (fabsl(tmp[(i - 1) * n + i - 1]) < epsilon) {
                 if (_DEBUG || _ERROR) {
                     printf("ERROR: division by zero");
                     return -1;
@@ -98,7 +98,7 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
             A[i * n + i] += sdvig;
         }
         
-        if (fabs(A[(_n - 1) * n + _n - 2]) < e) {
+        if (fabsl(A[(_n - 1) * n + _n - 2]) < e) {
             E[_n - 1] = A[(_n - 1) * n + _n - 1];
             _n--;
         }
@@ -107,7 +107,7 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
             printf("\nА:\n");
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    printf("%.9lf\t", A[i * n + j]);
+                    printf("%.9LF\t", A[i * n + j]);
                 }
                 printf("\n");
             }
@@ -123,8 +123,8 @@ int evc(int n, int max_iterations, double epsilon, double* A, double* E, double*
     }
     if (_DEBUG) printf("\n2х2 Matrix left, solving a quadratic equation\n");
     // x^2 + p*x + q = 0
-    double p = -A[0 * n + 0] - A[1 * n + 1];
-    double q = A[0 * n + 0] * A[1 * n + 1] - A[0 * n + 1] * A[1 * n + 0];
+    long double p = -A[0 * n + 0] - A[1 * n + 1];
+    long double q = A[0 * n + 0] * A[1 * n + 1] - A[0 * n + 1] * A[1 * n + 0];
     E[0] = (-p - sqrt(p * p - 4 * q)) / 2;
     E[1] = (-p + sqrt(p * p - 4 * q)) / 2;
     

@@ -1,10 +1,10 @@
 #include "task.h"
 
 size_t sim_memsize(int n) {
-    return (n * n + n) * sizeof(double);
+    return (n * n + n) * sizeof(long double);
 }
 
-void copy_tmp_to_A(double *A, double *tmp, int n) {
+void copy_tmp_to_A(long double *A, long double *tmp, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             A[i * n + j] = tmp[i * n + j];
@@ -12,15 +12,15 @@ void copy_tmp_to_A(double *A, double *tmp, int n) {
     }
 }
 
-int sim(int n, double* A, double* tmp, double precision) {
-    double *xa = &tmp[n * n];
+int sim(int n, long double* A, long double* tmp, long double precision) {
+    long double *xa = &tmp[n * n];
     for (int step = 0; step < n - 2; step++) {
         int indent = step + 1;
         if (_DEBUG) printf("\n**Step #%d**\n", indent);
         
         if (_DEBUG) printf("Extracting vector a and computing it's norm\n");
         xa[step] = 0.;
-        double norm_a = 0.;
+        long double norm_a = 0.;
         for (int i = indent; i < n; i++) {
             xa[i] = A[i * n + step];
             norm_a += xa[i] * xa[i];
@@ -29,13 +29,13 @@ int sim(int n, double* A, double* tmp, double precision) {
         
         if (_DEBUG) printf("Computing vector x\n");
         xa[indent] -= norm_a;
-        double norm_x = 0.;
+        long double norm_x = 0.;
         for (int i = indent; i < n; i++) {
             norm_x += xa[i] * xa[i];
         }
         
         norm_x = sqrt(norm_x);
-        if (fabs(norm_x) < precision) {
+        if (fabsl(norm_x) < precision) {
             continue;
         }
         for (int i = indent; i < n; i++) {
@@ -49,7 +49,7 @@ int sim(int n, double* A, double* tmp, double precision) {
                 tmp[i * n + j] = 0.;
                 
                 for (int k = 0; k < n; k++) {
-                    double U;
+                    long double U;
                     if (i == k) {
                         U = 1 - 2 * xa[i] * xa[k];
                     } else {
@@ -68,7 +68,7 @@ int sim(int n, double* A, double* tmp, double precision) {
                 tmp[i * n + j] = 0.;
                 
                 for (int k = 0; k < n; k++) {
-                    double U;
+                    long double U;
                     if (k == j) {
                         U = 1 - 2 * xa[k] * xa[j];
                     } else {
@@ -87,7 +87,7 @@ int sim(int n, double* A, double* tmp, double precision) {
         printf("\nА:\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                printf("%.9lf\t", A[i * n + j]);
+                printf("%.9LF\t", A[i * n + j]);
             }
             printf("\n");
         }
