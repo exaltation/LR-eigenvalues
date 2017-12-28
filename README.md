@@ -11,8 +11,8 @@ Where _options_ include:
 * `-e` print errors
 * `-p` print matrix
 * `-t` print execution time
-* `-prec=<num>` precision (default: 1e-14)
-* `-eps=<num>` epsilon (a = 0 if a < eps; default: 1e-10)
+* `-prec=<num>` precision (default: 1e-20)
+* `-eps=<num>` epsilon (a = 0 if a < eps; default: 1e-20)
 * `-max_iter=<num>` maximum iterations (default: 0, i.e. no limit)
 * `-h` or `-?` print help and exit
 
